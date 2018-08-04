@@ -3,23 +3,26 @@ Overview
 
 A demonstration of a voting system using NEO Smart Conracts on a private blockchain consensus network
 
-For NEO: c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b
-For GAS: 602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7
+Useful addresses:
+* NEO: c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b
+* GAS: 602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7
 
 Resources
 =========
 
-[NEO Python](https://github.com/CityOfZion/neo-python)
-[Prompt](https://neo-python.readthedocs.io/en/latest/prompt.html)
-[CLI](http://docs.neo.org/en-us/node/cli/cli.html)
-[API](https://github.com/neo-project/docs/tree/master/en-us/node/cli/2.7.6/api)
-[API reference](https://github.com/neo-project/neo/wiki/API-Reference)
-[NEO Python docker](https://hub.docker.com/r/cityofzion/neo-python/)
-[NEO private net](hhttps://hub.docker.com/r/cityofzion/neo-privatenet/)
-[NEO Python compiler](https://github.com/CityOfZion/neo-boa)
-[Smart Contracts](http://neo-python.readthedocs.io/en/latest/neo/SmartContract/smartcontracts.html)
-[Smart Contracts Workshop](https://github.com/CityOfZion/python-smart-contract-workshop)
-[Smart Contract Examples](https://github.com/CityOfZion/neo-smart-contract-examples/blob/master/README.md)
+Links:
+* [NEO Python](https://github.com/CityOfZion/neo-python)
+* [Prompt](https://neo-python.readthedocs.io/en/latest/prompt.html)
+* [CLI](http://docs.neo.org/en-us/node/cli/cli.html)
+* [API](https://github.com/neo-project/docs/tree/master/en-us/node/cli/2.7.6/api)
+* [API reference](https://github.com/neo-project/neo/wiki/API-Reference)
+* [NEO Python docker](https://hub.docker.com/r/cityofzion/neo-python/)
+* [NEO private net](hhttps://hub.docker.com/r/cityofzion/neo-privatenet/)
+* [NEO Python compiler](https://github.com/CityOfZion/neo-boa)
+* [Smart Contracts](http://neo-python.readthedocs.io/en/latest/neo/SmartContract/smartcontracts.html)
+* [Smart Contracts Workshop](https://github.com/CityOfZion/python-smart-contract-workshop)
+* [Smart Contract Examples](https://github.com/CityOfZion/neo-smart-contract-examples/blob/master/README.md)
+* [Screen](https://kb.iu.edu/d/acuy)
 
 Demo steps
 ==========
@@ -142,9 +145,34 @@ tty3 neo># open wallet neo-client.wallet
 Deploy and test contract
 ------------------------
 
+Compile a smart contract in a local workspace
+```bash
+$ python3 -m venv 'venv'
+$ source venv/bin/activate
+$ mkdir dist
+$ cd dist
+$ cat > 'event-print-smart-contract.py'
+from neo.contrib.smartcontract import SmartContract
+smart_contract = SmartContract("6537b4bd100e514119e3a7ab49d520d20ef2c2a4")
+@smart_contract.on_notify
+def sc_notify(event):
+    print("SmartContract Runtime.Notify event:", event)
+    if not isinstance(event.event_payload, ContractParameter) or event.event_payload.Type != ContractParameterType.Array or not len(event.event_payload.Value):
+        return
+    print("- payload part 1:", event.event_payload.Value[0].Value.decode("utf-8"))
+<ctrl-d>
+$ python3 -m pip install -r 'requirements.txt' -t '.'
+$ python3
+>>> from boa.compiler import Compiler
+>>> Compiler.load_and_save('event-print-smart-contract.py')
+<ctrl-d>
+$ 
+```
+
+
 Deploy a notifying contract and execite it, viewing the output on the monitor nodes:
 ```bash
- $ TODO
+$ TODO
 ```
 
 

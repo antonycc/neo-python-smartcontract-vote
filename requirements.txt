@@ -1,0 +1,6 @@
+astor>=0.6.2
+coz-bytecode>=0.5.1
+logzero>=1.5.0
+neo>=0.6.1
+neo-boa>=0.4.8
+neo-python>=0.7.6
