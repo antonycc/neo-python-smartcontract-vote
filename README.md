@@ -31,6 +31,7 @@ Download and start private net and two neo nodes:
 ```bash
 $ docker pull cityofzion/neo-privatenet
 $ docker pull cityofzion/neo-python
+$ # To kill all instances on this host: docker kill $(docker ps -q)
 $
 ```
 
@@ -52,24 +53,89 @@ tty1 root@neo-python:/neo-python#
 NEO monitor node with root wallet:
 ```bash
 tty2 $ docker run --rm -it --net=host -v $(pwd):/neo-python/sc -h neo-python --name neo-python cityofzion/neo-python /bin/bash
-tty2 /# np-prompt -p -v
-tty3 $root@neo-python:/neo-python#
+tty2 root@neo-python:/neo-python# np-prompt -p -v
+tty2 neo># open wallet neo-privnet.wallet
+<"coz">
+tty2 neo># wallet
+... truncated ...
+    "height": 9366,
+    "percent_synced": 100,
+    "synced_balances": [
+        "[NEO]: 100000000.0 ",
+        "[NEOGas]: 74679.9999 "
+    ],
+    "public_keys": [
+        {
+            "Address": "AK2nJJpJr6o664CWJKi1QRXjqeic2zRp8y",
+            "Public Key": "031a6c6fbbdf02ca351745fa86b9ba5a9452d785ac4f7fc2b7548ca2a46c4fcf4a"
+        }
+    ],
+... truncated ...
 ```
 
 NEO client with new wallet
 ```bash
 tty3 $ docker run --rm -it --net=host -v $(pwd):/neo-python/sc -h neo-python-client --name neo-python-client cityofzion/neo-python /bin/bash
-tty2 /# np-prompt -p -v
-tty3 $
+tty3 root@neo-python:/neo-python# np-prompt -p -v
+tty3 neo># create wallet neo-client.wallet
+[password]> ********** <"ababababab">                                                                    
+[password again]> ********** <"ababababab">
+... truncated ...
+    "height": 0,
+    "percent_synced": 0,
+    "synced_balances": [],
+    "public_keys": [
+        {
+            "Address": "AaP232YEsqkptMrjsNfLCateZquXwFADLQ",
+            "Public Key": "02e22be69743d53e0650ddad7384c31354c04e75dbf9b614da08e4ea042225de0b"
+        }
+    ],
+... truncated ...
 ```
-
 
 Test network
 -------------
 
-Create a new private wallet and fund it from the shipped wallet:
+Fund the client wallet from the root wallet with NEO and GAS:
 ```bash
- $ TODO
+tty2 neo># open wallet neo-privnet.wallet
+<"coz">
+tty2 neo># wallet
+... truncated ...
+    "synced_balances": [
+        "[NEO]: 100000000.0 ",
+        "[NEOGas]: 74679.9999 "
+    ],
+... truncated ...
+tty2 neo># send NEO <neo-client.wallet address> 10000
+<"coz">
+tty2 neo># send GAS <neo-client.wallet address> 5000 
+<"coz">
+tty2 neo># wallet
+... truncated ...
+    "synced_balances": [
+        "[NEO]: 99990000.0 ",
+        "[NEOGas]: 69679.9999 "
+    ],
+... truncated ...
+```
+
+Observe the updated client wallet:
+```bash
+tty3 neo># open wallet neo-client.wallet
+<"ababababab">                                                                    
+... truncated ...
+    "synced_balances": [
+        "[NEO]: 10000.0 ",
+        "[NEOGas]: 5000.0 "
+    ],
+    "public_keys": [
+        {
+            "Address": "AaP232YEsqkptMrjsNfLCateZquXwFADLQ",
+            "Public Key": "02e22be69743d53e0650ddad7384c31354c04e75dbf9b614da08e4ea042225de0b"
+        }
+    ],
+... truncated ...
 ```
 
 
