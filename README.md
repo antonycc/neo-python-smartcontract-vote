@@ -147,25 +147,13 @@ Deploy and test contract
 
 Compile a smart contract distribution in a local workspace
 ```bash
-$ python3 -m venv 'venv'
-$ source 'venv/bin/activate'
-$ mkdir 'dist'
-$ cp '__init__.py' './dist/.'
-$ cp 'requirements.txt' './dist/.'
-$ cp 'event-print-smart-contract.py' './dist/.'
-$ cp 'compile.py' './dist/.'
-$ cd 'dist'
-$ python3 -m pip install -r 'requirements.txt' -t '.'
-$ mv neo/io neo/tmp ; mv neo/tmp neo/IO
-$ mv neo/core neo/tmp ; mv neo/tmp neo/Core
-$ cat > compile.py
->>> from boa.compiler import Compiler
->>> Compiler.load_and_save('event-print-smart-contract.py')
-<ctrl-d>
-$ python3 compile.py
+$ mkdir -p './avm'
+$ cd neo-boa-compiler/
+$ docker build --tag neo-boa-compiler .
+$ docker run -it --rm -v $(pwd)/../sc:/python-contracts -v $(pwd)/../awm:/compiled-contracts neo-boa
+$ cd ..
 $ 
 ```
-
 
 Deploy a notifying contract and execite it, viewing the output on the monitor nodes:
 ```bash
