@@ -1,4 +1,4 @@
-from neo.contrib.smartcontract import SmartContract
+from neo.SmartContract import SmartContract
 
 smart_contract = SmartContract("6537b4bd100e514119e3a7ab49d520d20ef2c2a4")
 

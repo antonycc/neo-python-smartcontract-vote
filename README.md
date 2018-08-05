@@ -145,27 +145,24 @@ tty3 neo># open wallet neo-client.wallet
 Deploy and test contract
 ------------------------
 
-Compile a smart contract in a local workspace
+Compile a smart contract distribution in a local workspace
 ```bash
 $ python3 -m venv 'venv'
-$ source venv/bin/activate
-$ mkdir dist
-$ cd dist
-$ cat > 'event-print-smart-contract.py'
-from neo.contrib.smartcontract import SmartContract
-smart_contract = SmartContract("6537b4bd100e514119e3a7ab49d520d20ef2c2a4")
-@smart_contract.on_notify
-def sc_notify(event):
-    print("SmartContract Runtime.Notify event:", event)
-    if not isinstance(event.event_payload, ContractParameter) or event.event_payload.Type != ContractParameterType.Array or not len(event.event_payload.Value):
-        return
-    print("- payload part 1:", event.event_payload.Value[0].Value.decode("utf-8"))
-<ctrl-d>
+$ source 'venv/bin/activate'
+$ mkdir 'dist'
+$ cp '__init__.py' './dist/.'
+$ cp 'requirements.txt' './dist/.'
+$ cp 'event-print-smart-contract.py' './dist/.'
+$ cp 'compile.py' './dist/.'
+$ cd 'dist'
 $ python3 -m pip install -r 'requirements.txt' -t '.'
-$ python3
+$ mv neo/io neo/tmp ; mv neo/tmp neo/IO
+$ mv neo/core neo/tmp ; mv neo/tmp neo/Core
+$ cat > compile.py
 >>> from boa.compiler import Compiler
 >>> Compiler.load_and_save('event-print-smart-contract.py')
 <ctrl-d>
+$ python3 compile.py
 $ 
 ```
 
