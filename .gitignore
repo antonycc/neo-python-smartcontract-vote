@@ -26,7 +26,8 @@ wheels/
 MANIFEST
 
 # NEO Compiles Smart Contracts
-avm
+**/*.avm
+**/*debug.json
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
