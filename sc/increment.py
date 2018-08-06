@@ -1,27 +1,30 @@
-# Source: http://neo-python.readthedocs.io/en/latest/neo/SmartContract/smartcontracts.html
 from boa.interop.Neo.Storage import Get,Put,Delete,GetContext
 
 def Main(operation, addr, value):
-
 
     if not is_valid_addr(addr):
         return False
 
     ctx = GetContext()
 
-    if operation == 'add':
+    if operation == 'create':
+        new_balance = 0
+        Put(ctx, addr, new_balance)
+        return new_balance
+
+    elif operation == 'select':
         balance = Get(ctx, addr)
         new_balance = balance + value
         Put(ctx, addr, new_balance)
         return new_balance
 
-    elif operation == 'remove':
+    elif operation == 'result':
         balance = Get(ctx, addr)
-        Put(ctx, addr, balance - value)
-        return balance - value
+        return balance
 
-    elif operation == 'balance':
-        return Get(ctx, addr)
+    elif operation == 'delete':
+        Delete(ctx, addr)
+        return 0
 
     return False
 

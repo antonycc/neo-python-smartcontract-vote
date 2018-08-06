@@ -23,6 +23,7 @@ Links:
 * [Smart Contracts Workshop](https://github.com/CityOfZion/python-smart-contract-workshop)
 * [Smart Contract Examples](https://github.com/CityOfZion/neo-smart-contract-examples/blob/master/README.md)
 * [Screen](https://kb.iu.edu/d/acuy)
+* [URL](https://en.wikipedia.org/wiki/Uniform_Resource_Name)
 
 Demo steps
 ==========
@@ -216,13 +217,7 @@ tty3 neo> testinvoke 0x65bc18944450249f6658acc0a7ab81f5769ae6fe add AG4GfwjnvydA
 ```
 (the output appears in both tty2 and tty3)
 
-
-Deploy a contract with storage for voting and execite it, viewing the output on the monitor nodes:
-```bash
- $ TODO
-```
-
-Deploy a smart contracts to cast a VOTE:
+Deploy a smart contract to cast a VOTE:
 ```bash
 tty2 neo> build sc/sc/poll.py test 070710 02 True False 'create' 'test-poll' ['selection-1', 'selection-2']
 tty2 neo> import contract sc/sc/poll.avm 070710 02 True False
