@@ -24,6 +24,7 @@ Links:
 * [Smart Contract Examples](https://github.com/CityOfZion/neo-smart-contract-examples/blob/master/README.md)
 * [Screen](https://kb.iu.edu/d/acuy)
 * [URL](https://en.wikipedia.org/wiki/Uniform_Resource_Name)
+* [DotNet docs](http://docs.neo.org/en-us/sc/reference/fw/dotnet/neo.html)
 
 Demo steps
 ==========
