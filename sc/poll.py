@@ -6,21 +6,26 @@ Contract Hash:              <TODO>
 Available on NEO TestNet:   False
 Available on CoZ TestNet:   False
 Available on MainNet:       False
-Example: (return as integer)
+Example: (1 vote)
     Test Invoke:            build /path/to/poll.py test 07070707 02 True False \
-                                'test-1' select 'poll-1' 'selection-1' 
+                                AXpm7MnucoDDW78X4c1NHggy6TYorMfrxT selection poll-1 selection-1
     Expected Result:        1
-    Operation Count:        382
-    GAS Consumption:        2.447
+    Operation Count:        372
+    GAS Consumption:        2.441
+Example: (1 vote, this selection not taken)
+    Test Invoke:            build /path/to/poll.py test 07070707 02 True False \
+                                AXpm7MnucoDDW78X4c1NHggy6TYorMfrxT selection poll-1 selection-1
+    Expected Result:        0
+    Operation Count:        345
+    GAS Consumption:        0.427
 Example: (return as integer)
     Test Invoke:            build /path/to/poll.py test 07070707 02 True False \
-                                'test-1' result 'poll-1' 'selection-1' 
+                                AXpm7MnucoDDW78X4c1NHggy6TYorMfrxT result 'poll-1' 'selection-1' 
     Expected Result:        1
     Operation Count:        234
     GAS Consumption:        0.255
 """
 
-# from boa.blockchain.vm.Neo.Runtime import CheckWitness
 from boa.interop.Neo.Runtime import CheckWitness
 from boa.interop.Neo.Storage import Get,Put,Delete,GetContext
 from boa.interop.Neo.Contract import Script
@@ -29,49 +34,58 @@ from boa.builtins import concat
 allow_test_users = True
 urn_base = "urn:example:poll:"
 
-def Main(caller, operation, poll, selection):
+def Main(voter, operation, poll, selection):
+
+    if not voter_is_caller(voter):
+        return False
+
+    print(concat("Choosing operation: ", operation))
 
     ctx = GetContext()
+    
+    if operation == "select":
+        poll_voter_key = build_poll_voter_key(poll, voter)
+        voter_status = Get(ctx, poll_voter_key)
+        if voter_status != 'voted':
+            vote = vote_for_selection(ctx, poll_voter_key, poll, selection)
+            return votes
 
-    # Is the declared caller the invoker?
+    elif operation == "result":
+        votes = get_selection_result(ctx, poll, selection)
+        return votes
+
+    return False
+
+
+def voter_is_caller(caller):
     try:
-        witness = True
-        if allow_test_users == True and caller != "test-1" and caller != "test-2" and caller != "test-3":
+        if allow_test_users == True and (caller == "test-1" or caller == "test-2"):
             print(concat("WARNING: Skipping CheckWitness for: ", caller))
         else:
-            print(concat("Calling CheckWitness for: ", caller))
+            #print(concat("Calling CheckWitness for: ", caller))
             if not CheckWitness(caller):
                 print(concat("CheckWitness failed for: ", caller))
                 return False
     except:
-        print(concat("CheckWitness error for: ", caller))
+        print(concat("ERROR: CheckWitness error for: ", caller))
         return False
-    voter = caller
+    return True
 
-    print(concat("Choosing operation: ", operation))
-    
-    if operation == "select":
-        poll_selection_key = build_poll_selection_key(poll, selection)
-        poll_voter_key = build_poll_voter_key(poll, voter)
-        votes = Get(ctx, poll_selection_key) + 1
-        voter_status = Get(ctx, poll_voter_key)
-        if voter_status == 'voted':
-            print(concat("Voter status: ", voter_status))
-            return False
-        else:
-            Put(ctx, poll_voter_key, "voted")
-        votes = votes + 1
-        Put(ctx, poll_selection_key, votes)
-        print(concat("Selected: ", selection))
-        return votes
 
-    elif operation == "result":
-        poll_selection_key = build_poll_selection_key(poll, selection)
-        votes = Get(ctx, poll_selection_key)
-        print(concat("Result: ", votes))
-        return votes
+def vote_for_selection(ctx, poll_voter_key, poll, selection):
+    poll_selection_key = build_poll_selection_key(poll, selection)
+    votes = Get(ctx, poll_selection_key) + 1
+    Put(ctx, poll_voter_key, "voted")
+    Put(ctx, poll_selection_key, votes)
+    print(concat("Selected: ", selection))
+    return votes
 
-    return False
+
+def get_selection_result(ctx, poll, selection):
+    poll_selection_key = build_poll_selection_key(poll, selection)
+    votes = Get(ctx, poll_selection_key)
+    print(concat("Result: ", votes))
+    return votes
 
 
 def build_poll_selection_key(poll, selection):
