@@ -591,8 +591,8 @@ Balance Contract
 
 Deploy a contract with storage and execite it, viewing the output on the monitor nodes:
 ```bash
-tty2 neo> build sc/sc/balance_tracker.py test 070502 02 True False add AG4GfwjnvydAZodm4xEDivguCtjCFzLcJy 3   
-tty2 neo> import contract sc/sc/balance_tracker.avm 070502 02 True False
+tty2 neo> build sc/sc/balance_tracker.py test 070502 02 True False False add AG4GfwjnvydAZodm4xEDivguCtjCFzLcJy 3   
+tty2 neo> import contract sc/sc/balance_tracker.avm 070502 02 True False False
 tty2 neo> testinvoke 0x65bc18944450249f6658acc0a7ab81f5769ae6fe add AG4GfwjnvydAZodm4xEDivguCtjCFzLcJy 3 
 ...
 [I 180805 20:32:25 EventHub:62] [SmartContract.Execution.Success][13971] [65bc18944450249f6658acc0a7ab81f5769ae6fe] [tx 75e8799e43dc1d046263913178faab5ccee00d799c1ae3eb503eb1b5c3e646d5] {'type': 'Array', 'value': [{'type': 'Integer', 'value': '3'}]}
