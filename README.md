@@ -64,6 +64,7 @@ Resources
 
 Links:
 * [NEO Python](https://github.com/CityOfZion/neo-python)
+* [Docker](https://www.docker.com)
 * [Prompt](https://neo-python.readthedocs.io/en/latest/prompt.html)
 * [CLI](http://docs.neo.org/en-us/node/cli/cli.html)
 * [API](https://github.com/neo-project/docs/tree/master/en-us/node/cli/2.7.6/api)
@@ -211,14 +212,14 @@ Deploy and test contract
 Build and test a contract using the NEO prompt:
 ```bash
 tty3 neo># config sc-events on
-tty3 neo># build sc/sc/hello-world.py test '' 01 False False
+tty3 neo># build sc/sc/hello-world.py test '' 01 False False False
 tty3 neo> 
 ```
 
 Build then import a contract and supply meta-data:
 ```bash
 tty3 neo> build sc/sc/hello-world.py
-tty3 neo> import contract sc/sc/hello-world.avm '' 01 False False 
+tty3 neo> import contract sc/sc/hello-world.avm '' 01 False False False
 [Contract Name] > hello-world01                                                          
 [Contract Version] > 0.0.1                                                           
 [Contract Author] > client                                                                     
@@ -292,7 +293,7 @@ tty3 neo> wallet
 tty3 neo> build sc/sc/poll.py
 [I 180812 14:43:12 BuildNRun:50] Saved output to sc/sc/poll.avm 
 tty3 neo>
-tty3 neo> import contract sc/sc/poll.avm 07070707 02 True False
+tty3 neo> import contract sc/sc/poll.avm 07070707 02 True False False
 Please fill out the following contract details:
 [Contract Name] > poll
 [Contract Version] > 0.0.1
